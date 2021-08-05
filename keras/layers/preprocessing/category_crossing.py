@@ -122,7 +122,7 @@ class CategoryCrossing(base_layer.Layer):
       # TODO(momernick): Support separator with ragged_cross.
       if self.separator != '_X_':
         raise ValueError('Non-default separator with ragged input is not '
-                         'supported yet, given {}'.format(self.separator))
+                         'implemented, received {}.'.format(self.separator))
       return tf.ragged.cross(partial_inputs)
     elif sparse_out:
       return tf.sparse.cross(partial_inputs, separator=self.separator)
@@ -151,7 +151,7 @@ class CategoryCrossing(base_layer.Layer):
       if len(inputs) < depth:
         raise ValueError(
             'Number of inputs cannot be less than depth, got {} input tensors, '
-            'and depth {}'.format(len(inputs), depth))
+            'and depth {}.'.format(len(inputs), depth))
       for partial_inps in itertools.combinations(inputs, depth):
         partial_out = self.partial_crossing(
             partial_inps, ragged_out, sparse_out)
@@ -162,14 +162,15 @@ class CategoryCrossing(base_layer.Layer):
 
   def compute_output_shape(self, input_shape):
     if not isinstance(input_shape, (tuple, list)):
-      raise ValueError('A `CategoryCrossing` layer should be called '
-                       'on a list of inputs.')
+      raise ValueError(
+          f'A `CategoryCrossing` layer should be called on a list of inputs, '
+          f'received {type(input_shape)}.')
     input_shapes = input_shape
     batch_size = None
     for inp_shape in input_shapes:
       inp_tensor_shape = tf.TensorShape(inp_shape).as_list()
       if len(inp_tensor_shape) != 2:
-        raise ValueError('Inputs must be rank 2, get {}'.format(input_shapes))
+        raise ValueError('Inputs must be rank 2, get {}.'.format(input_shapes))
       if batch_size is None:
         batch_size = inp_tensor_shape[0]
     # The second dimension is dynamic based on inputs.

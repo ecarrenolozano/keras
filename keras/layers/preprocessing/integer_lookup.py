@@ -336,13 +336,14 @@ class IntegerLookup(index_lookup.IndexLookup):
     # If max_tokens is set, the token must be greater than 1 - otherwise we
     # are creating a 0-element vocab, which doesn't make sense.
     if max_tokens is not None and max_tokens <= 1:
-      raise ValueError("If set, max_tokens must be greater than 1. "
-                       "You passed %s" % (max_tokens,))
+      raise ValueError(
+          f"If max_tokens argument is set for IntegerLookup, it must be "
+          f"greater than 1. You passed {max_tokens}.")
 
     if num_oov_indices < 0:
       raise ValueError(
-          "num_oov_indices must be greater than or equal to 0. You passed %s" %
-          (num_oov_indices,))
+          f"The value of num_oov_indices argument for IntegerLookup must be "
+          f"greater than or equal to 0. You passed {num_oov_indices}")
 
     # Make sure mask and oov are of the dtype we want.
     mask_token = None if mask_token is None else np.int64(mask_token)
